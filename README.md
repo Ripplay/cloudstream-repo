@@ -1,18 +1,18 @@
-# OMERCS26 Cloudstream Repo
+# Oygy8b5F Cloudstream Repo
 
 Cloudstream için 20 ayrı Türkçe film ve dizi kaynağı içeren, otomatik derlenen eklenti reposu.
 
 ## Kısa kod
 
-Planlanan ve 24 Ağustos 2026 tarihinde boşta olduğu doğrulanan kod:
+24 Ağustos 2026 tarihinde etkinleştirilen kısa kod:
 
 ```text
-OMERCS26
+Oygy8b5F
 ```
 
 Cloudstream'de **Ayarlar > Eklentiler > Repo ekle** alanına bu kod yazılır. Cloudstream
-alfanümerik kısa kodları `https://cutt.ly/<kod>` adresinden çözer. Bu nedenle kod,
-repo GitHub'da yayımlandıktan sonra aşağıdaki hedefe yönlendirilmelidir:
+alfanümerik kısa kodları `https://cutt.ly/<kod>` adresinden çözer. Bu kod aşağıdaki
+repo tanımına yönlenir:
 
 ```text
 https://raw.githubusercontent.com/Ripplay/cloudstream-repo/main/repo.json
@@ -54,7 +54,7 @@ Cloudstream kaynakları olarak kaydeder.
    permissions** seçeneğini açın.
 3. `main` dalına gönderim yapın. İş akışı 13 `.cs3` dosyasını ve
    `plugins.json` dosyasını `builds` dalında yayımlar.
-4. `OMERCS26` Cutt.ly kodunu yukarıdaki ham `repo.json` adresine yönlendirin.
+4. `Oygy8b5F` Cutt.ly kodunun yukarıdaki ham `repo.json` adresine yönlendiğini doğrulayın.
 
 Tam URL ile eklemek için:
 
