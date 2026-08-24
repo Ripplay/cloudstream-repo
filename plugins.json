@@ -1,0 +1,279 @@
+[
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/DDizi.cs3",
+        "status": 1,
+        "version": 2,
+        "name": "DDizi",
+        "internalName": "DDizi",
+        "authors": [
+            "yunus60",
+            "GitLatte",
+            "patr0nq"
+        ],
+        "description": "Ddizi, dizi izle, dizi seyret, ddizi.im - G\u00fcncel ve eski dizileri en iyi g\u00f6r\u00fcnt\u00fc kalitesiyle bulabilece\u011finiz dizi izleme sitesi.",
+        "fileSize": 26802,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "TvSeries"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=ddizi.im&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-b2ee2b3a1975f22e772945e4d33687eeb46c7a4c957591a67c04ed115456790a"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/DiziBox.cs3",
+        "status": 1,
+        "version": 11,
+        "name": "DiziBox",
+        "internalName": "DiziBox",
+        "authors": [
+            "keyiflerolsun",
+            "nikyokki"
+        ],
+        "description": "Yabanc\u0131 Dizi izle, T\u00fcm yabanc\u0131 dizilerin yeni ve eski sezonlar\u0131n\u0131 full hd izleyebilece\u011finiz elit site.",
+        "fileSize": 24942,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "TvSeries"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=www.dizibox.live&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-92556057ad4ad4fa8994efb4d006b9f1b764fedc3cfc332bbfee68364df2757b"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/DiziMom.cs3",
+        "status": 1,
+        "version": 29,
+        "name": "DiziMom",
+        "internalName": "DiziMom",
+        "authors": [
+            "keyiflerolsun",
+            "nikyokki"
+        ],
+        "description": "Binlerce yerli yabanc\u0131 dizi ar\u015fivi, t\u00fcm sezonlar, kesintisiz b\u00f6l\u00fcmler. Sadece dizi izle, Dizimom heryerde seninle!",
+        "fileSize": 34338,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "TvSeries"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=www.dizimom.work&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-491ac31e07373144f2ec42c7c3388da424a813db1f8d92f93abe99c2a16a6547"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/DiziPal.cs3",
+        "status": 1,
+        "version": 48,
+        "name": "DiziPal",
+        "internalName": "DiziPal",
+        "authors": [
+            "keyiflerolsun",
+            "muratcesmecioglu"
+        ],
+        "description": "en yeni dizileri g\u00fcvenli ve h\u0131zl\u0131 \u015fekilde sunar.",
+        "fileSize": 20087,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=dizipal2216.com&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-204c3ed192c86511c0c167f6a3e23fd6a03f9ef331e85e7cee4beda75d7532fb"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/FilmMakinesi.cs3",
+        "status": 1,
+        "version": 26,
+        "name": "FilmMakinesi",
+        "internalName": "FilmMakinesi",
+        "authors": [
+            "keyiflerolsun",
+            "usdogu",
+            "nikyokki"
+        ],
+        "description": "Film Makinesi, en yeni ve en g\u00fcncel filmleri sitemizde full HD kalite fark\u0131 ile izleyebilirsiniz. HD film izle denildi\u011finde akla gelen en kaliteli film izleme sitesi.",
+        "fileSize": 23584,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "Movie"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=filmmakinesi.to&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-a0c5199a9aafc8fc3422f0781b6b9ce767c7a04b064fb5b2e15d54b2d00d2f01"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/FilmModu.cs3",
+        "status": 1,
+        "version": 16,
+        "name": "FilmModu",
+        "internalName": "FilmModu",
+        "authors": [
+            "keyiflerolsun",
+            "nikyokki"
+        ],
+        "description": "Film modun geldiyse y\u00fcksek kalitede en yeni filmleri izle, 1080p izleyebilece\u011finiz reklamsiz film sitesi.",
+        "fileSize": 22465,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "Movie"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=filmmodu.cc&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-c24e60519ca1f53e886de32ff75c4500a14917a6f76cd1dd10d450795c7bb347"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/FullHDFilmizlesene.cs3",
+        "status": 1,
+        "version": 12,
+        "name": "FullHDFilmizlesene",
+        "internalName": "FullHDFilmizlesene",
+        "authors": [
+            "keyiflerolsun",
+            "nikyokki"
+        ],
+        "description": "Sinema zevkini evinize kadar getirdik. T\u00fcrkiye'nin lider Film sitesinde, en yeni filmleri Full HD izleyin.",
+        "fileSize": 39745,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "Movie"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=www.fullhdfilmizlesene.now&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-a6abdd13d9d90d1d7b68b58bcc23f2abaaaeed097b1c8a4f0db1dda75443dc3e"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/HDFilmCehennemi.cs3",
+        "status": 1,
+        "version": 37,
+        "name": "HDFilmCehennemi",
+        "internalName": "HDFilmCehennemi",
+        "authors": [
+            "hexated",
+            "keyiflerolsun",
+            "nikyokki"
+        ],
+        "description": "T\u00fcrkiye'nin en h\u0131zl\u0131 hd film izleme sitesi",
+        "fileSize": 31895,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=hdfilmcehennemi.nl&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-3fd2aaa1b08f1b62ada8e0f1efa49a32de0b19dff0ab55fe47b72f234e38e440"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/HDFilmIzle.cs3",
+        "status": 1,
+        "version": 8,
+        "name": "HDFilmIzle",
+        "internalName": "HDFilmIzle",
+        "authors": [
+            "nikyokki"
+        ],
+        "description": "HDFilmizle ile Full HD izle, 1080p kalitede Yerli ve Yabanc\u0131 filmlerle T\u00fcrk\u00e7e dublaj veya Altyaz\u0131 olarak kesintisiz film izlemenin tad\u0131n\u0131 \u00e7\u0131kar\u0131n.",
+        "fileSize": 40634,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=hdfilmizle.ink&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-4e85ba57f537765f3ccda701c108151c04126d42c9dde0efaeec753695dcd89d"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/JetFilmizle.cs3",
+        "status": 1,
+        "version": 33,
+        "name": "JetFilmizle",
+        "internalName": "JetFilmizle",
+        "authors": [
+            "keyiflerolsun",
+            "nikyokki"
+        ],
+        "description": "Binlerce Film \u0130zleme Se\u00e7ene\u011fiyle En \u0130yi Film \u0130zleme Sitesi",
+        "fileSize": 29809,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "Movie"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=jetfilmizle.now&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-7c09fb19f149679e5148c59d870f8b139747a6f73102479a113bf5031cf6d318"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/OwnedSites.cs3",
+        "status": 1,
+        "version": 2,
+        "name": "OwnedSites",
+        "internalName": "OwnedSites",
+        "authors": [
+            "Repo sahibi"
+        ],
+        "description": "TrDizi\u0130zle, DiziBal, DiziRella, DiziBol, FilmIzzle, LiderFilm\u0130zle ve DiziFilm\u0130zle kaynaklar\u0131",
+        "fileSize": 45209,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=dizibal.com&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-74302a0a83805097a00beb41d0d4c53d3176a7d9045d2bfaa32ea1f002740dfb"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/SinemaCX.cs3",
+        "status": 1,
+        "version": 15,
+        "name": "SinemaCX",
+        "internalName": "SinemaCX",
+        "authors": [
+            "keyiflerolsun",
+            "nikyokki"
+        ],
+        "description": "G\u00fcncel ve en iyi yabanc\u0131 filmleri y\u00fcksek g\u00f6r\u00fcnt\u00fc kalitesinde, T\u00fcrk\u00e7e dublaj ve altyaz\u0131 se\u00e7enekleriyle filmleri full izleyin.",
+        "fileSize": 16285,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "Movie"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=www.sinema.gg&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-0cd5cfb9fc0a4c5413c37cac1333c2024d64a78ebdc8528ce57f137e4caba958"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/YabanciDizi.cs3",
+        "status": 1,
+        "version": 9,
+        "name": "YabanciDizi",
+        "internalName": "YabanciDizi",
+        "authors": [
+            "nikyokki"
+        ],
+        "description": "Son \u00e7\u0131kan yabanc\u0131 dizi ve filmleri yabancidizi' de izle. En yeni yabanc\u0131 film ve diziler, t\u00fcrk\u00e7e altyaz\u0131l\u0131 yada dublaj olarak 1080p kalitesinde hd izle.",
+        "fileSize": 47599,
+        "repositoryUrl": "https://github.com/Ripplay/cloudstream-repo",
+        "language": "tr",
+        "tvTypes": [
+            "TvSeries"
+        ],
+        "iconUrl": "https://www.google.com/s2/favicons?domain=yabancidizi.news&sz=%size%",
+        "apiVersion": 1,
+        "fileHash": "sha256-4156650848763ecd307a3a688c36fa5414bc65ab1b914b3ccb8f345422e9846b"
+    }
+]
