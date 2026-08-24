@@ -151,6 +151,38 @@ class JetFilmizle : MainAPI() {
         val document = app.get(data).document
 
         val iframes = mutableListOf<String>()
+
+        // JetFilmizle no longer puts the active player iframe in the page. The
+        // current site requests it from /jetplayer for every source button.
+        document.select(".player-source-btn[data-source-index][data-player-type]")
+            .map {
+                it.attr("data-source-index") to it.attr("data-player-type")
+            }
+            .filter { (sourceIndex, playerType) ->
+                sourceIndex.isNotBlank() && playerType.isNotBlank()
+            }
+            .distinct()
+            .forEach { (sourceIndex, playerType) ->
+                runCatching {
+                    app.post(
+                        "$mainUrl/jetplayer",
+                        referer = data,
+                        headers = mapOf("X-Requested-With" to "XMLHttpRequest"),
+                        data = mapOf(
+                            "film_id" to (document.selectFirst("input[name=film_id]")
+                                ?.attr("value") ?: return@runCatching),
+                            "source_index" to sourceIndex,
+                            "player_type" to playerType,
+                        ),
+                    ).document.select("iframe[src]").forEach { frame ->
+                        val src = frame.attr("src").trim()
+                        if (src.isNotBlank()) {
+                            iframes.add(if (src.startsWith("//")) "https:$src" else src)
+                        }
+                    }
+                }
+            }
+
         val mainIframe =
             fixUrlNull(document.selectFirst("div#movie iframe")?.attr("data-src")) ?: fixUrlNull(
                 document.selectFirst("div#movie iframe")?.attr("data-litespeed-src")

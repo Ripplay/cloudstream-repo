@@ -18,14 +18,19 @@ import com.lagradost.cloudstream3.SearchResponse
 import com.lagradost.cloudstream3.SubtitleFile
 import com.lagradost.cloudstream3.TvType
 import com.lagradost.cloudstream3.app
+import com.lagradost.cloudstream3.base64DecodeArray
 import com.lagradost.cloudstream3.fixUrlNull
 import com.lagradost.cloudstream3.mainPageOf
 import com.lagradost.cloudstream3.newHomePageResponse
 import com.lagradost.cloudstream3.newMovieLoadResponse
 import com.lagradost.cloudstream3.newMovieSearchResponse
 import com.lagradost.cloudstream3.utils.ExtractorLink
+import com.lagradost.cloudstream3.utils.ExtractorLinkType
+import com.lagradost.cloudstream3.utils.Qualities
 import com.lagradost.cloudstream3.utils.loadExtractor
+import com.lagradost.cloudstream3.utils.newExtractorLink
 import org.jsoup.nodes.Element
+import kotlin.random.Random
 
 class HDFilmIzle(
     private val baseUrl: String,
@@ -167,14 +172,115 @@ class HDFilmIzle(
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         Log.d("HDF", "data » ${data}")
-        val document = app.get(data).document
+        val response = app.get(data)
+        val document = response.document
+        val nonce = Regex("""video\s*:\s*[\"]([^\"]+)[\"]""")
+            .find(response.text)?.groupValues?.getOrNull(1)
+            ?: document.selectFirst("#playex[data-nonce]")?.attr("data-nonce")
+        val postId = document.selectFirst("[data-post-id]")?.attr("data-post-id")
+        val players = document.select("[data-post-id][data-player-name]")
+            .map {
+                Triple(
+                    it.attr("data-post-id"),
+                    it.attr("data-player-name"),
+                    it.attr("data-part-key"),
+                )
+            }
+            .filter { (id, player, _) -> id.isNotBlank() && player.isNotBlank() }
+            .ifEmpty {
+                if (!postId.isNullOrBlank()) listOf(Triple(postId, "SetPlay", "")) else emptyList()
+            }
+            .distinct()
 
-        val iframe = document.selectFirst("iframe")?.attr("data-src") ?: ""
-        Log.d("HDF", "iframe » ${iframe}")
-        loadExtractor(iframe, mainUrl, subtitleCallback, callback)
+        var found = false
+        if (!nonce.isNullOrBlank()) {
+            players.forEach { (id, player, partKey) ->
+                val ajax = runCatching {
+                    app.post(
+                        "$mainUrl/wp-admin/admin-ajax.php",
+                        referer = data,
+                        headers = mapOf("X-Requested-With" to "XMLHttpRequest"),
+                        data = mapOf(
+                            "action" to "get_video_url",
+                            "nonce" to nonce,
+                            "post_id" to id,
+                            "player_name" to player,
+                            "part_key" to partKey,
+                        ),
+                    ).parsedSafe<VideoAjaxResponse>()
+                }.getOrNull()
+                val iframe = ajax?.data?.url ?: return@forEach
+                found = if (iframe.contains("setplay.", true)) {
+                    resolveSetPlay(iframe, data, callback) || found
+                } else {
+                    loadExtractor(iframe, data, subtitleCallback, callback) || found
+                }
+            }
+        }
 
+        if (!found) {
+            document.select("iframe[src], iframe[data-src]").forEach { frame ->
+                val iframe = frame.attr("data-src").ifBlank { frame.attr("src") }
+                if (iframe.isNotBlank() && !iframe.contains("youtube.com/embed")) {
+                    found = loadExtractor(iframe, data, subtitleCallback, callback) || found
+                }
+            }
+        }
+
+        return found
+    }
+
+    private suspend fun resolveSetPlay(
+        setPlayUrl: String,
+        pageReferer: String,
+        callback: (ExtractorLink) -> Unit,
+    ): Boolean {
+        val setPlay = app.get(setPlayUrl, referer = pageReferer)
+        val frameArgs = Regex(
+            """SPG\.cerceve\([^,]+,\s*[\"]([^\"]+)[\"]\s*,\s*[\"]([^\"]+)[\"]"""
+        ).find(setPlay.text) ?: return false
+        val encrypted = base64DecodeArray(frameArgs.groupValues[1])
+        val key = base64DecodeArray(frameArgs.groupValues[2])
+        if (key.isEmpty()) return false
+        val fastPlayUrl = encrypted.mapIndexed { index, byte ->
+            (byte.toInt() xor key[index % key.size].toInt()).toByte()
+        }.toByteArray().toString(Charsets.UTF_8).substringBefore('|')
+        if (!fastPlayUrl.startsWith("http")) return false
+
+        val fastPlay = app.get(fastPlayUrl, referer = setPlayUrl)
+        val sp = Regex("""[\"]sp[\"]\s*:\s*[\"]([^\"]+)[\"]""")
+            .find(fastPlay.text)?.groupValues?.getOrNull(1) ?: return false
+        val spTime = Regex("""[\"]spT[\"]\s*:\s*(\d+)""")
+            .find(fastPlay.text)?.groupValues?.getOrNull(1)?.toLongOrNull() ?: return false
+        val stream = Regex("""stream\s*:\s*[\"]([^\"]+)[\"]""")
+            .find(fastPlay.text)?.groupValues?.getOrNull(1)
+            ?.replace("&amp;", "&") ?: return false
+        val origin = fastPlayUrl.substringBefore("/video/")
+        val manifest = if (stream.startsWith("http")) stream else "$origin/${stream.trimStart('/')}"
+        val randomPart = Random.nextLong(2_176_782_336L).toString(36)
+        val proof = "$sp|$spTime|$randomPart"
+        var hash = 0x811c9dc5u
+        proof.forEach { hash = (hash xor it.code.toUInt()) * 0x01000193u }
+        val xSp = "$spTime.$randomPart.${hash.toString(16)}"
+
+        callback(
+            newExtractorLink(name, "$name - SetPlay", manifest, ExtractorLinkType.M3U8) {
+                this.referer = fastPlayUrl
+                this.quality = Qualities.Unknown.value
+                this.headers = mapOf("X-Sp" to xSp)
+            }
+        )
         return true
     }
+
+    private data class VideoAjaxResponse(
+        @JsonProperty("success") val success: Boolean = false,
+        @JsonProperty("data") val data: VideoAjaxData? = null,
+    )
+
+    private data class VideoAjaxData(
+        @JsonProperty("url") val url: String? = null,
+    )
 
     private data class SubSource(
         @JsonProperty("file") val file: String? = null,

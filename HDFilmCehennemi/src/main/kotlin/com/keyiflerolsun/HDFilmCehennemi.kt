@@ -298,6 +298,14 @@ class HDFilmCehennemi : MainAPI() {
         Log.d("HDCH", "data » $data")
         val document = app.get(data, interceptor = interceptor).document
 
+        document.select("div.video-container iframe[data-src], div.video-container iframe[src]")
+            .forEach { frame ->
+                val iframe = frame.attr("data-src").ifBlank { frame.attr("src") }
+                if (iframe.isNotBlank()) {
+                    loadExtractor(iframe, data, subtitleCallback, callback)
+                }
+            }
+
         document.select("div.alternative-links").map { element ->
             element to element.attr("data-lang").uppercase()
         }.forEach { (element, langCode) ->
@@ -314,8 +322,11 @@ class HDFilmCehennemi : MainAPI() {
                     referer = data
                 ).text
                 Log.d("HDCH", "Found videoID: $videoID")
-                var iframe = Regex("""data-src=\\"([^"]+)""").find(apiGet)?.groupValues?.get(1)!!
-                    .replace("\\", "")
+                var iframe = Regex("""data-src=\\?"([^"]+)""")
+                    .find(apiGet)?.groupValues?.getOrNull(1)
+                    ?.replace("\\/", "/")
+                    ?.replace("\\", "")
+                    ?: return@forEach
                 Log.d("HDCH", "iframe » $iframe")
                 iframe = iframe.replace("{rapidrame_id}", "")
                 Log.d("HDCH", "iframe » $iframe")

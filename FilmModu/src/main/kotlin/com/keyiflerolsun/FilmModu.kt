@@ -15,6 +15,7 @@ import com.lagradost.cloudstream3.SearchResponse
 import com.lagradost.cloudstream3.SubtitleFile
 import com.lagradost.cloudstream3.TvType
 import com.lagradost.cloudstream3.app
+import com.lagradost.cloudstream3.base64Decode
 import com.lagradost.cloudstream3.fixUrl
 import com.lagradost.cloudstream3.fixUrlNull
 import com.lagradost.cloudstream3.mainPageOf
@@ -29,6 +30,8 @@ import org.jsoup.nodes.Element
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.utils.ExtractorLinkType
+import com.lagradost.cloudstream3.utils.loadExtractor
+import org.jsoup.Jsoup
 
 
 class FilmModu : MainAPI() {
@@ -132,7 +135,28 @@ class FilmModu : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         Log.d("FLMMD", "Başlatılıyor - loadLinks için data: $data")
-        val document = app.get(data).document
+        val response = app.get(data)
+        val document = response.document
+
+        // The current site stores its iframe HTML in Base64 (ilkpartkod and
+        // similar variables) instead of the old videoId/get-source flow.
+        var decodedPlayerFound = false
+        Regex(
+            """(?:ilkpartkod|part[\w]*)\s*=\s*['\"]([A-Za-z0-9+/=]{80,})['\"]""",
+            RegexOption.IGNORE_CASE,
+        ).findAll(response.text).map { it.groupValues[1] }.distinct().forEach { encoded ->
+            runCatching { base64Decode(encoded) }.getOrNull()?.let { playerHtml ->
+                Jsoup.parse(playerHtml).select("iframe[src]").forEach { frame ->
+                    val iframe = fixUrlNull(frame.attr("src")) ?: return@forEach
+                    if (!iframe.contains("vr_set=1")) {
+                        decodedPlayerFound =
+                            loadExtractor(iframe, data, subtitleCallback, callback) || decodedPlayerFound
+                    }
+                }
+            }
+        }
+
+        if (decodedPlayerFound) return true
 
         val alternates = document.select("div.alternates a")
         if (alternates.isEmpty()) {

@@ -33,7 +33,7 @@ open class HCCloseLoadExtractor : ExtractorApi() {
         val iSource = app.get(url, referer = extRef)
         val obfuscatedScript = iSource.document.select("script").find { it.data().contains("eval(function(p,a,c,k,e") }?.data()?.trim()
         getSubs(iSource, obfuscatedScript,subtitleCallback)
-        getLinks(obfuscatedScript, callback)
+        getLinks(iSource.text, obfuscatedScript, callback)
     }
 
     private fun getSubs(
@@ -67,29 +67,42 @@ open class HCCloseLoadExtractor : ExtractorApi() {
         }
     }
 
-    private suspend fun getLinks(obfuscatedScript: String?, callback: (ExtractorLink) -> Unit) {
-        val rawScript        = getAndUnpack(obfuscatedScript!!)
-        val helloVarmi = rawScript.contains("dc_hello")
-        var dcRegex = Regex("dc_hello\\(\"([^\"]*)\"\\)", setOf(RegexOption.IGNORE_CASE))
-        if (!helloVarmi) {
-            dcRegex = Regex("""dc_\w+\(\[(.*?)\]\)""", RegexOption.DOT_MATCHES_ALL)
-        }
-        val match = dcRegex.find(rawScript)
-        val groupValues = match!!.groupValues[1]
+    private suspend fun getLinks(
+        pageText: String,
+        obfuscatedScript: String?,
+        callback: (ExtractorLink) -> Unit,
+    ) {
+        val unpacked = obfuscatedScript?.let { runCatching { getAndUnpack(it) }.getOrNull() }.orEmpty()
+        val script = "$pageText\n$unpacked"
+        val helloMatch = Regex(
+            """dc_hello\([\"]([^\"]*)[\"]\)""",
+            RegexOption.IGNORE_CASE,
+        ).find(script)
+        val partsMatch = Regex(
+            """dc_\w+\(\[(.*?)\]\)""",
+            RegexOption.DOT_MATCHES_ALL,
+        ).find(script)
 
-        val lastUrl = if (helloVarmi) {
-            Log.d("Kekik_${this.name}", "groupValues » $groupValues")
-            val dcUrl = dcHello(groupValues).substringAfter("http")
-            Log.d("Kekik_${this.name}", "dcUrl » $dcUrl")
-            dcUrl
-        } else{
-            val parts = groupValues.split(",")
-                .map { it.trim().removeSurrounding("\"") }
-            Log.d("Kekik_${this.name}", "parts » $parts")
-            val dcUrl = dcNew(parts)
-            Log.d("Kekik_${this.name}", "dcUrl » $dcUrl")
-            dcUrl
+        val lastUrl = when {
+            helloMatch != null -> dcHello(helloMatch.groupValues[1])
+            partsMatch != null -> {
+                val parts = Regex("""[\"]([^\"]+)[\"]""")
+                    .findAll(partsMatch.groupValues[1])
+                    .map { it.groupValues[1] }
+                    .toList()
+                when {
+                    script.contains("var acc = 141") && script.contains("acc + 6") -> dcCurrent(parts)
+                    else -> dcNew(parts)
+                }
+            }
+            else -> return
+        }.let { decoded ->
+            val httpIndex = decoded.indexOf("http")
+            if (httpIndex >= 0) decoded.substring(httpIndex) else decoded
         }
+        if (!lastUrl.startsWith("http")) return
+        Log.d("Kekik_${this.name}", "dcUrl » $lastUrl")
+
         callback.invoke(
             newExtractorLink(
                 source  = this.name,
@@ -101,6 +114,28 @@ open class HCCloseLoadExtractor : ExtractorApi() {
                 this.quality = Qualities.Unknown.value
             }
         )
+    }
+
+    private fun dcCurrent(parts: List<String>): String {
+        val rotated = parts.joinToString("").map { char ->
+            when (char) {
+                in 'a'..'z' -> 'a' + ((char - 'a' + 20) % 26)
+                in 'A'..'Z' -> 'A' + ((char - 'A' + 20) % 26)
+                else -> char
+            }
+        }.joinToString("")
+        val first = String(base64DecodeArray(rotated), Charsets.ISO_8859_1)
+        val second = String(base64DecodeArray(first), Charsets.ISO_8859_1)
+        val cipher = base64DecodeArray(second)
+        var acc = 141
+        return buildString(cipher.size) {
+            cipher.forEach { byte ->
+                val value = byte.toInt() and 0xff
+                acc = (acc + 6) and 0xff
+                append((value xor acc).toChar())
+                acc = (acc + value) and 0xff
+            }
+        }
     }
 
     fun dcHello(base64Input: String): String {
