@@ -1,0 +1,8 @@
+{
+  "name": "OMERCS26 Cloudstream Repo",
+  "description": "20 Türkçe film ve dizi kaynağı içeren Cloudstream eklenti reposu",
+  "manifestVersion": 1,
+  "pluginLists": [
+    "https://raw.githubusercontent.com/Ripplay/cloudstream-repo/builds/plugins.json"
+  ]
+}

@@ -1,0 +1,64 @@
+name: Build Cloudstream extensions
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths-ignore:
+      - "**.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cloudstream-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kaynak kodu al
+        uses: actions/checkout@v4
+
+      - name: JDK 17 kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Android SDK kur
+        uses: android-actions/setup-android@v3
+
+      - name: Android 36 paketlerini kur
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Eklentileri derle
+        run: |
+          chmod +x gradlew
+          ./gradlew make makePluginsJson
+
+      - name: Dağıtım dosyalarını hazırla
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/cloudstream-dist"
+          while IFS= read -r file; do
+            cp "$file" "$RUNNER_TEMP/cloudstream-dist/"
+          done < <(find . -type f -path "*/build/*.cs3")
+          cp build/plugins.json "$RUNNER_TEMP/cloudstream-dist/plugins.json"
+          test -n "$(find "$RUNNER_TEMP/cloudstream-dist" -name '*.cs3' -print -quit)"
+
+      - name: builds dalını yayımla
+        shell: bash
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git checkout --orphan builds
+          git rm -rf .
+          cp "$RUNNER_TEMP/cloudstream-dist/"* .
+          git add .
+          git commit -m "Build $GITHUB_SHA"
+          git push --force origin builds
